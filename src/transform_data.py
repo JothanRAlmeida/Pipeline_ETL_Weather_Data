@@ -112,3 +112,16 @@ def normalize_datetime_columns(df: pd.DataFrame, columns_names: list[str])->pd.D
     logging.INFO("-> Colunas convertidas para datetime\n")
 
     return df
+
+def data_transformations():
+    print("-> Iniciando transformações...\n")
+
+    df = create_dataframe(path_name)
+    df = normalize_dataframe(df)
+    df = drop_columns(df, columns_names_to_drop)
+    df = rename_columns(df, columns_names_to_rename)
+    df = normalize_dataframe(df, columns_to_normalize_datime)
+
+    logging.INFO("-> Transformações concluídas...\n")
+    
+    return df
