@@ -37,6 +37,8 @@ columns_names_to_rename = {
         "sys.sunset": "sunset",
         # weather_id, weather_main, weather_description 
 }
+columns_to_normalize_datime = ['datetime', 'sunrise', 'sunset']
+
 
 # Cria o dataframe
 def create_dataframe(path_name: str) -> pd.DataFrame:
@@ -45,7 +47,7 @@ def create_dataframe(path_name: str) -> pd.DataFrame:
     path = path_name
 
     if not path.exist():
-        raise FileNotFoundError(f"Arquivo não encontrado: {path}")
+        raise FileNotFoundError(f"Arquivo não encontrado: {path}\n")
 
     with open(path) as file:
        data = json.load(file)
@@ -56,6 +58,7 @@ def create_dataframe(path_name: str) -> pd.DataFrame:
 
     return df
 
+# Normaliza coluna do dataframe
 def normalize_dataframe(df: pd.DataFrame)->pd.DataFrame:
 
     logging.INFO("-> Normalizando o data frame...\n")
@@ -74,25 +77,38 @@ def normalize_dataframe(df: pd.DataFrame)->pd.DataFrame:
     # Concatena as colunas
     df = pd.concat([df, df_weather], axis=1)
 
-    logging.INFO(f"Coluna 'weather' normalizada - {len(df.columns)} colunas")
+    logging.INFO(f"Coluna 'weather' normalizada - {len(df.columns)} colunas\n")
 
     return df
 
+# Remove colunas desnecessárias
 def drop_columns(df: pd.DataFrame, columns_names: list[str])->pd.DataFrame:
-    logging.INFO(f"-> Removendo colunas {columns_names}")
+    logging.INFO(f"-> Removendo colunas {columns_names}\n")
 
     df = df.drop(columns=columns_names)
 
-    logging.INFO(f"-> Colunas removidas - {len(df.columns)} colunas restantes")
+    logging.INFO(f"-> Colunas removidas - {len(df.columns)} colunas restantes\n")
 
     return df
 
+# Renomeia colunas
 def rename_columns(df: pd.DataFrame, columns_names: dict[str,str])->pd.DataFrame:
-    logging.INFO("->Renomeando colunas...")
+    logging.INFO("->Renomeando colunas...\n")
 
     df = df.rename(columns=columns_names)
 
-    logging.INFO("-> Colunas renomeadas...")
+    logging.INFO("-> Colunas renomeadas...\n")
 
     return df
 
+# Normaliza timestamp para datetime
+def normalize_datetime_columns(df: pd.DataFrame, columns_names: list[str])->pd.DataFrame:
+    logging.INFO(f"-> Normalizando colunas para datime: {columns_names}\n")
+
+    for name in columns_names:
+        df[name] = pd.to_datetime(df[name], unit='s', utc=True).dt.tz_convert('America/Sao_Paulo')
+
+    
+    logging.INFO("-> Colunas convertidas para datetime\n")
+
+    return df
