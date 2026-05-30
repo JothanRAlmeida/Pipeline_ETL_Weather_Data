@@ -16,3 +16,10 @@ user = os.getenv('user')
 password = os.getenv('senha')
 database = os.getenv('database')
 host = 'host.docker.internal'
+
+def create_engine():
+    logging.INFO(f"-> Conectando em {host}:5432/{database}")
+
+    return create_engine(
+        f"postgresql+psycopg2://{user}:{quote_plus(password)}@{host}:5432/{database}"
+    )
