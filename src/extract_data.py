@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 #url = f'https://api.openweathermap.org/data/2.5/weather?q=Montanha,ES,BR&units=metric&lang=pt_br&appid={api_key}'
 
-def extract_data(url: str)->list:
+def extract_weather_data(url: str)->list:
     response = requests.get(url)
     data = response.json()
 
