@@ -15,8 +15,13 @@ load_dotenv(env_path)
 user = os.getenv('user')
 password = os.getenv('senha')
 database = os.getenv('database')
-host = 'host.docker.internal'
-#host = 'localhost'
+#host = 'host.docker.internal'
+host = 'localhost'
+
+print("user =", repr(user))
+print("password =", repr(password))
+print("database =", repr(database))
+print("host =", repr(host))
 
 def get_engine():
     logging.info(f"-> Conectando em {host}:5432/{database}\n")
@@ -27,7 +32,7 @@ def get_engine():
 
 engine = get_engine()
 
-def load_weather_data(table_name: str, df: pd.DataFrame):
+def load_weather_data(table_name: str, df):
     df.to_sql(
         name = table_name,
         con = engine,
@@ -37,5 +42,5 @@ def load_weather_data(table_name: str, df: pd.DataFrame):
 
     logging.info(f"-> Dados carregados com sucesso...\n")
 
-    df_check = pd.read_sql(f"SELECT * FROM {database}", con = engine)
-    logging.info(f"-> Total de registtros na tabela: {len(df_check)}\n")
+    df_check = pd.read_sql(f"SELECT * FROM {table_name}", con = engine)
+    logging.info(f"-> Total de registros na tabela: {len(df_check)}\n")
