@@ -113,7 +113,7 @@ def normalize_datetime_columns(df: pd.DataFrame, columns_names: list[str])->pd.D
 
     return df
 
-def data_transformations():
+def data_transformations(): 
     print("-> Iniciando transformações...\n")
 
     df = create_dataframe(path_name)
@@ -123,5 +123,5 @@ def data_transformations():
     df = normalize_dataframe(df, columns_to_normalize_datime)
 
     logging.INFO("-> Transformações concluídas...\n")
-    
+
     return df
