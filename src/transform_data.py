@@ -46,7 +46,7 @@ def create_dataframe(path_name: str) -> pd.DataFrame:
 
     path = path_name
 
-    if not path.exist():
+    if not path.exists():
         raise FileNotFoundError(f"Arquivo não encontrado: {path}\n")
 
     with open(path) as file:
