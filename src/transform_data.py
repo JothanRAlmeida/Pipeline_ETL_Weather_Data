@@ -120,7 +120,7 @@ def data_transformations():
     df = normalize_dataframe(df)
     df = drop_columns(df, columns_names_to_drop)
     df = rename_columns(df, columns_names_to_rename)
-    df = normalize_dataframe(df, columns_to_normalize_datime)
+    df = normalize_datetime_columns(df, columns_to_normalize_datime)
 
     logging.info("-> Transformações concluídas...\n")
 
