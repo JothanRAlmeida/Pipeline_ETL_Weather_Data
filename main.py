@@ -1,5 +1,5 @@
 from src.extract_data import extract_data
-from src.load_data import load_data
+from src.load_data import load_weather_data
 from src.transform_data import data_transformations
 
 import os

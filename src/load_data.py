@@ -26,7 +26,7 @@ def get_engine():
 
 engine = get_engine()
 
-def load_data(table_name: str, df: pd.DataFrame):
+def load_weather_data(table_name: str, df: pd.DataFrame):
     df.to_sql(
         name = table_name,
         con = engine,
