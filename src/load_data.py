@@ -16,9 +16,10 @@ user = os.getenv('user')
 password = os.getenv('senha')
 database = os.getenv('database')
 host = 'host.docker.internal'
+#host = 'localhost'
 
 def get_engine():
-    logging.INFO(f"-> Conectando em {host}:5432/{database}\n")
+    logging.info(f"-> Conectando em {host}:5432/{database}\n")
 
     return create_engine(
         f"postgresql+psycopg2://{user}:{quote_plus(password)}@{host}:5432/{database}"
@@ -34,7 +35,7 @@ def load_weather_data(table_name: str, df: pd.DataFrame):
         index = False
     )
 
-    logging.INFO(f"-> Dados carregados com sucesso...\n")
+    logging.info(f"-> Dados carregados com sucesso...\n")
 
     df_check = pd.read_sql(f"SELECT * FROM {database}", con = engine)
-    logging.INFO(f"-> Total de registtros na tabela: {len(df_check)}\n")
+    logging.info(f"-> Total de registtros na tabela: {len(df_check)}\n")
