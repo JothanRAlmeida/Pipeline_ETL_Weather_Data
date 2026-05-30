@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # '../data/weather_data.json'
 path_name = Path(__file__).parent.parent / 'data' / 'weather_data.json'
-columns_names_to_drop = ['weather', 'weather_icon', 'sys.type']
+columns_names_to_drop = ['weather', 'weather_icon']
 columns_names_to_rename = {
         "base": "base",
         "visibility": "visibility",
