@@ -18,11 +18,6 @@ database = os.getenv('database')
 #host = 'host.docker.internal'
 host = 'localhost'
 
-print("user =", repr(user))
-print("password =", repr(password))
-print("database =", repr(database))
-print("host =", repr(host))
-
 def get_engine():
     logging.info(f"-> Conectando em {host}:5432/{database}\n")
 
