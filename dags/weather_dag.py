@@ -1,10 +1,10 @@
 from datetime import datetime, timedelta
 from airflow.decorators import dag, task
 from pathlib import Path
-import sys, os
+import sys
+import os
 
-# Registra manualmente o caminho da pasta src
-sys,Path.insert(0, '/opt/airflow/src')
+sys.path.insert(0, '/opt/airflow/src')
 
 from extract_data import extract_weather_data
 from load_data import load_weather_data
@@ -18,18 +18,18 @@ API_KEY = os.getenv('api_key')
 url = f'https://api.openweathermap.org/data/2.5/weather?q=Montanha,ES,BR&units=metric&lang=pt_br&appid={API_KEY}'
 
 @dag(
-    dag_id = 'weather_pipeline',
-    default_args = {
-        'owner: 'airflow',
+    dag_id='weather_pipeline',
+    default_args={
+        'owner': 'airflow',
         'depends_on_past': False,
         'retries': 2,
         'retry_delay': timedelta(minutes=5)
     },
-    description = 'Pipeline ETL - Clima Montanha',
-    schedule = '0 */1 * * *',
-    start_date = datetime(2026, 2, 7),
-    catchup = False,
-    tags = {'ETL', 'Pipeline'}
+    description='Pipeline ETL - CLima Montanha',
+    schedule='0 */1 * * * ',
+    start_date=datetime(2026, 2, 7),
+    catchup=False,
+    tags=['weather', 'etl', 'pipeline']
 )
 
 def weather_pipeline():
