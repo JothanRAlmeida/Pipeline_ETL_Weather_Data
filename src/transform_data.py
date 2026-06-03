@@ -5,8 +5,10 @@ import logging
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+# Cria objeto de caminho para o arquivo onde estão os dados 
 # '../data/weather_data.json'
 path_name = Path(__file__).parent.parent / 'data' / 'weather_data.json'
+
 columns_names_to_drop = ['weather', 'weather_icon']
 columns_names_to_rename = {
         "base": "base",
@@ -40,13 +42,13 @@ columns_names_to_rename = {
 columns_to_normalize_datime = ['datetime', 'sunrise', 'sunset']
 
 
-# Cria o dataframe
+# Transforma os dados semiestruturados em formato JSON em DataFrame
 def create_dataframe(path_name: str) -> pd.DataFrame:
     logging.info("-> Criando data frame...\n")
 
-    path = path_name
+    path = path_name # Caminho do local do arquivo com os dados
 
-    if not path.exists():
+    if not path.exists(): # Verifica se o arquivo foi encontrado
         raise FileNotFoundError(f"Arquivo não encontrado: {path}\n")
 
     with open(path) as file:
@@ -58,7 +60,7 @@ def create_dataframe(path_name: str) -> pd.DataFrame:
 
     return df
 
-# Normaliza coluna do dataframe
+# Normaliza coluna do DataFrame que está em formato JSON e inclui colunas no DataFrame
 def normalize_dataframe(df: pd.DataFrame)->pd.DataFrame:
 
     logging.info("-> Normalizando o data frame...\n")
@@ -66,7 +68,7 @@ def normalize_dataframe(df: pd.DataFrame)->pd.DataFrame:
     # lambda transforma a lista contendo um dicionário em colunas
     df_weather = pd.json_normalize(df["weather"].apply(lambda x: x[0]))
 
-    # Renomear colunas pois nomes já existem
+    # Renomear colunas pois nomes já existem no DataFrame principal
     df_weather = df_weather.rename(columns={
         "id": "weather_id",
         "main": "weather_main",
@@ -74,7 +76,7 @@ def normalize_dataframe(df: pd.DataFrame)->pd.DataFrame:
         "icon": "weather_icon"
     })
 
-    # Concatena as colunas
+    # Concatena as colunas para unificar DataFrames
     df = pd.concat([df, df_weather], axis=1)
 
     logging.info(f"Coluna 'weather' normalizada - {len(df.columns)} colunas\n")
@@ -85,6 +87,7 @@ def normalize_dataframe(df: pd.DataFrame)->pd.DataFrame:
 def drop_columns(df: pd.DataFrame, columns_names: list[str])->pd.DataFrame:
     logging.info(f"-> Removendo colunas {columns_names}\n")
 
+    # Remove colunas do DataFrame que estão na lista columns_names
     df = df.drop(columns=columns_names)
 
     logging.info(f"-> Colunas removidas - {len(df.columns)} colunas restantes\n")
@@ -95,6 +98,7 @@ def drop_columns(df: pd.DataFrame, columns_names: list[str])->pd.DataFrame:
 def rename_columns(df: pd.DataFrame, columns_names: dict[str,str])->pd.DataFrame:
     logging.info("->Renomeando colunas...\n")
 
+    # Renomeia as colunas inseridas no dicionário columns_names
     df = df.rename(columns=columns_names)
 
     logging.info("-> Colunas renomeadas...\n")
@@ -106,6 +110,7 @@ def normalize_datetime_columns(df: pd.DataFrame, columns_names: list[str])->pd.D
     logging.info(f"-> Normalizando colunas para datime: {columns_names}\n")
 
     for name in columns_names:
+        # Normaliza as colunas da lista columns_names em formato timestamp para datetime para melhorar visual
         df[name] = pd.to_datetime(df[name], unit='s', utc=True).dt.tz_convert('America/Sao_Paulo')
 
     
@@ -113,7 +118,8 @@ def normalize_datetime_columns(df: pd.DataFrame, columns_names: list[str])->pd.D
 
     return df
 
-def data_transformations(): 
+# Chama todas as funções de transformação em ordem 
+def data_transformations(): # Não passsa nada pois está utilizando variáveis globais do arquivo
     print("-> Iniciando transformações...\n")
 
     df = create_dataframe(path_name)
